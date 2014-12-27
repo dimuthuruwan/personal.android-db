@@ -23,12 +23,12 @@
             <li>override the getWritableDatabase method to return the appropriate Database class subclass (SQLiteDatabaseAdapter or ContentProdiverAdapter)</li>
         </ul>
     </li>
-    <li>update the DBAccess class as needed:
+    <li>update the <a href="https://github.com/A00841554/AndroidDatabase/blob/master/src/main/java/com/example/database/database/DBAccess.java">DBAccess</a> class as needed:
         <ul>
             <li>update DATABASE_VERSION as needed</li>
             <li>update the onCreate method</li>
             <li>update the onUpgrade method</li>
         </ul>
     </li>
-    <li>interact with the database through the Table subclasses.</li>
+    <li><a href="https://github.com/A00841554/AndroidDatabase/blob/master/src/main/java/com/example/database/application/MainActivity.java#L116-L136">interact with the database</a> through the Table subclasses.</li>
 </ol>
