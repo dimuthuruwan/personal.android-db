@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Name Database</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- edit activity -->
+    <string name="action_add">Add</string>
+    <string name="action_delete">Delete</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+
+    <!-- common -->
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- main activity -->
+    <string name="title_activity_main">Name Database</string>
+
+</resources>
