@@ -97,7 +97,7 @@ public abstract class Table implements SQLiteWords
      *
      * @return name of this table.
      */
-    abstract Object getName();
+    public abstract Object getName();
 
     /**
      * returns an array of {@code ColumnFactory} instances used to produce the
@@ -108,7 +108,7 @@ public abstract class Table implements SQLiteWords
      * @return array of {@code ColumnFactory} instances used to produce the
      *   columns for this instance.
      */
-    abstract HashMap<String, ColumnFactory> getColumnFactories();
+    public abstract HashMap<String, ColumnFactory> getColumnFactories();
 
     /**
      * returns an array of {@code Column} instances associated with this table.

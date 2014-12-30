@@ -15,7 +15,7 @@ public class NamesTable extends Table
 {
     public static final NamesTable sInstance = new NamesTable();
 
-    public static final HashMap<String, ColumnFactory> mColumnFactories = new HashMap<>(3);
+    private static final HashMap<String, ColumnFactory> mColumnFactories = new HashMap<>(3);
 
     static
     {
@@ -25,13 +25,13 @@ public class NamesTable extends Table
     }
 
     @Override
-    String getName()
+    public String getName()
     {
         return Entry.TABLE_NAME;
     }
 
     @Override
-    HashMap<String, ColumnFactory> getColumnFactories()
+    public HashMap<String, ColumnFactory> getColumnFactories()
     {
         return mColumnFactories;
     }
