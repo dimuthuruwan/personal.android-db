@@ -173,7 +173,7 @@ public class DBAccess extends SQLiteOpenHelper
         cursor.moveToFirst();
 
         // verify that the column types correspond with the java types.
-        for(String columnName : columnFactories.keySet())
+        for(String columnName : cursor.getColumnNames())
         {
             try
             {
@@ -181,9 +181,9 @@ public class DBAccess extends SQLiteOpenHelper
                 int columnIndex = cursor.getColumnIndex(columnFactory.getName());
                 if(!verifyType(columnFactory.getJavaType(), cursor.getType(columnIndex)))
                 {
-                    throw new IllegalArgumentException("Incompatible types: "
-                            +columnFactory.getJavaType()+", "
-                            +cursor.getType(columnIndex));
+                    throw new IllegalArgumentException("Incompatible types or missing columns: "
+                            +"factory column type: "+columnFactory.getJavaType()+", "
+                            +"cursor column type: "+cursor.getType(columnIndex));
                 }
             }
             catch(IllegalArgumentException e)
@@ -194,7 +194,7 @@ public class DBAccess extends SQLiteOpenHelper
                 first = true;
                 for(String cursorColumnName : cursor.getColumnNames())
                 {
-                    details.append((first) ? "; column names: " : ", ");
+                    details.append((first) ? "; cursor column names: " : ", ");
                     details.append(cursorColumnName);
                     first = false;
                 }
@@ -207,12 +207,13 @@ public class DBAccess extends SQLiteOpenHelper
                     first = false;
                 }
 
-                throw new IllegalArgumentException("passed ColumnFactory instances don't match the columns in the cursor; exception: "+e+details);
+                throw new IllegalArgumentException(e.toString()+" : "+details.toString());
             }
             catch(Exception e)
             {
                 if(cursor.getCount() == 0)
                 {
+                    Log.e(TAG, e.toString());
                     return new Row[0];
                 }
                 else
@@ -230,7 +231,7 @@ public class DBAccess extends SQLiteOpenHelper
         {
             // create the row instance, and inject column data
             Map<String, Column> columns = new LinkedHashMap<>();
-            for(String columnName : columnFactories.keySet())
+            for(String columnName : cursor.getColumnNames())
             {
                 ColumnFactory columnFactory = columnFactories.get(columnName);
                 Column column = columnFactory.makeColumn();
