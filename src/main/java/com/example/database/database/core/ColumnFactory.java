@@ -1,4 +1,4 @@
-package com.example.database.database;
+package com.example.database.database.core;
 
 /**
  * {@code ColumnFactory} produces columns that are associated with this factory.
@@ -7,12 +7,8 @@ package com.example.database.database;
  *
  * @author Eric Tsang
  */
-class ColumnFactory
+public class ColumnFactory
 {
-    /**
-     * pointer to {@code Table} that products belong to.
-     */
-    private final Table mTable;
 
     /**
      * name of products.
@@ -27,7 +23,7 @@ class ColumnFactory
     /**
      * SQLite data type that's being stored in products.
      */
-    private final SQLite.Type mSQLiteType;
+    private final SQLiteWords.Type mSQLiteType;
 
     /** describes the data types that can be saved in this instance. */
     public enum JavaType
@@ -49,7 +45,7 @@ class ColumnFactory
     /**
      * SQLite data constraints placed on products.
      */
-    final SQLite.Constraint[] mConstraints;
+    final SQLiteWords.Constraint[] mConstraints;
 
     //////////////////
     // constructors //
@@ -59,17 +55,13 @@ class ColumnFactory
      * instantiates a {@code ColumnFactory} that makes {@code Column} instances
      *   that has or is associated with the the passed parameters.
      *
-     * @param table reference to the table that produced {@code Columns} are
-     *   associated with.
      * @param name name of produced {@code Columns}.
      * @param type data type that produced {@code Column} instances hold.
      * @param constraints data constraints associated with produced {@code
      *   Column} instances.
      */
-    public ColumnFactory(Table table, String name,
-            JavaType type, SQLite.Constraint ... constraints)
+    public ColumnFactory(String name, JavaType type, SQLiteWords.Constraint ... constraints)
     {
-        mTable = table;
         mName = name.trim();
         mJavaType = type;
         mConstraints = constraints;
@@ -77,35 +69,35 @@ class ColumnFactory
         {
 
             case BOOLEAN:
-            mSQLiteType = SQLite.Type.INT;
+            mSQLiteType = SQLiteWords.Type.INT;
             break;
 
             case BYTES:
-            mSQLiteType = SQLite.Type.BLOB;
+            mSQLiteType = SQLiteWords.Type.BLOB;
             break;
 
             case DOUBLE:
-            mSQLiteType = SQLite.Type.REAL;
+            mSQLiteType = SQLiteWords.Type.REAL;
             break;
 
             case FLOAT:
-            mSQLiteType = SQLite.Type.REAL;
+            mSQLiteType = SQLiteWords.Type.REAL;
             break;
 
             case INT:
-            mSQLiteType = SQLite.Type.INT;
+            mSQLiteType = SQLiteWords.Type.INT;
             break;
 
             case LONG:
-            mSQLiteType = SQLite.Type.INT;
+            mSQLiteType = SQLiteWords.Type.INT;
             break;
 
             case SHORT:
-            mSQLiteType = SQLite.Type.INT;
+            mSQLiteType = SQLiteWords.Type.INT;
             break;
 
             case STRING:
-            mSQLiteType = SQLite.Type.TEXT;
+            mSQLiteType = SQLiteWords.Type.TEXT;
             break;
 
             default:
@@ -116,16 +108,6 @@ class ColumnFactory
     //////////////////////
     // public interface //
     //////////////////////
-
-    /**
-     * returns the {@code Table} instance that this instance is a part of.
-     *
-     * @return SQLite data type associated with this instance.
-     */
-    public Table getTable()
-    {
-        return mTable;
-    }
 
     /**
      * returns the name of this instance.
@@ -142,7 +124,7 @@ class ColumnFactory
      *
      * @return SQLite data type associated with products.
      */
-    public SQLite.Type getSQLiteType()
+    public SQLiteWords.Type getSQLiteType()
     {
         return mSQLiteType;
     }

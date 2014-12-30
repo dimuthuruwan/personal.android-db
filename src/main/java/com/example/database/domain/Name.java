@@ -1,7 +1,7 @@
 package com.example.database.domain;
 
-import com.example.database.database.NamesTable;
-import com.example.database.database.Row;
+import com.example.database.database.core.NamesTable;
+import com.example.database.database.core.Row;
 
 /**
  * Created by etsang on 16/10/14.

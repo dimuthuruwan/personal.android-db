@@ -1,7 +1,10 @@
-package com.example.database.database;
+package com.example.database.database.core;
+import android.content.ContentValues;
 import android.provider.BaseColumns;
 
-import java.util.HashMap;
+import com.example.database.database.DBAccess;
+
+import java.util.Map;
 
 /**
  * a {@code Row} that has {@code Column} instances and is associated with a
@@ -12,14 +15,9 @@ import java.util.HashMap;
 public class Row
 {
     /**
-     * {@code Table} object that this instance is associated with.
-     */
-    private final Table mTable;
-
-    /**
      * {@code Column} instances associated with this instance.
      */
-    private final HashMap<String, Column> mColumns;
+    private final Map<String, Column> mColumns;
 
     //////////////////
     // constructors //
@@ -28,14 +26,12 @@ public class Row
     /**
      * instantiates a {@code Row} for the passed {@code Table}.
      *
-     * @param  table reference to a {@code Table} that instance is to be
-     *   a part of.
+     * @param  columns reference to the {@code Column} that instances that
+     *   are part of this row.
      */
-    Row(Table table, Long id)
+    public Row(Map<String, Column> columns)
     {
-        mTable = table;
-        mColumns = mTable.getColumns();
-        setId(id);
+        mColumns = columns;
     }
 
     //////////////////////
@@ -67,22 +63,12 @@ public class Row
     }
 
     /**
-     * returns the {@code Table} that instance is associated with.
-     *
-     * @return {@code Table} object that instance is associated with.
-     */
-    public Table getTable()
-    {
-        return mTable;
-    }
-
-    /**
      * returns an array of {@code Column} instances that's part of this {@code
      *   Row}.
      *
      * @return {@code Column} instances that make up instance.
      */
-    public HashMap<String, Column> getColumns()
+    public Map<String, Column> getColumns()
     {
         return mColumns;
     }

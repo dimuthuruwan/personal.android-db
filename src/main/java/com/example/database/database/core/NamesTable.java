@@ -1,9 +1,10 @@
-package com.example.database.database;
+package com.example.database.database.core;
 
-import android.content.Context;
 import android.provider.BaseColumns;
 
-import com.example.database.database.ColumnFactory.JavaType;
+import com.example.database.database.core.ColumnFactory.JavaType;
+
+import java.util.HashMap;
 
 /**
  * contract describing table used for saving name data
@@ -15,25 +16,19 @@ public class NamesTable extends Table
     public static final NamesTable sInstance = new NamesTable();
 
     @Override
-    protected String getName()
+    String initializeName()
     {
         return Entry.TABLE_NAME;
     }
 
     @Override
-    protected ColumnFactory[] getColumnFactories()
+    HashMap<String, ColumnFactory> initializeColumnFactories()
     {
-        return new ColumnFactory[] {
-                new ColumnFactory(this, Entry._ID,        JavaType.LONG,   Constraint.PRIMARY_KEY),
-                new ColumnFactory(this, Entry.FIRST_NAME, JavaType.STRING, Constraint.NOT_NULL),
-                new ColumnFactory(this, Entry.LAST_NAME,  JavaType.STRING, Constraint.NOT_NULL)
-        };
-    }
-
-    @Override
-    public Database getWritableDatabase(Context context)
-    {
-        return SQLiteDatabaseAdapter.getWritableDatabase(context);
+        HashMap<String, ColumnFactory> toReturn = new HashMap<>(3);
+        toReturn.put(Entry._ID, new ColumnFactory(Entry._ID, JavaType.LONG, Constraint.PRIMARY_KEY));
+        toReturn.put(Entry.FIRST_NAME, new ColumnFactory(Entry.FIRST_NAME, JavaType.STRING, Constraint.NOT_NULL));
+        toReturn.put(Entry.LAST_NAME, new ColumnFactory(Entry.LAST_NAME,  JavaType.STRING, Constraint.NOT_NULL));
+        return toReturn;
     }
 
     /** contract describing table used for saving name data */

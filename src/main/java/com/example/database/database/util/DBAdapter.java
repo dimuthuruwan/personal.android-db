@@ -1,14 +1,13 @@
 package com.example.database.database.util;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.example.database.database.QueryArgs;
-import com.example.database.database.Row;
-import com.example.database.database.Table;
+import com.example.database.database.DBAccess;
+import com.example.database.database.core.Row;
+import com.example.database.database.core.Table;
 
 import java.util.ArrayList;
 
@@ -22,11 +21,11 @@ public abstract class DBAdapter extends BaseAdapter
 
     private PipeRowLoader mRowLoader;
 
-    public DBAdapter(Context context, Table table, QueryArgs queryArgs)
+    public DBAdapter(Context context, Table table, PipeRowLoader.Queryable querable)
     {
         super();
         mData = new ArrayList<>();
-        mRowLoader = new PipeRowLoader(context, table, queryArgs, new MyRowLoaderObserver());
+        mRowLoader = new PipeRowLoader(context, table, querable, new MyRowLoaderObserver());
     }
 
     //////////////////////

@@ -1,4 +1,4 @@
-package com.example.database.database;
+package com.example.database.database.core;
 
 import java.nio.ByteBuffer;
 
@@ -35,16 +35,6 @@ public class Column
     //////////////////////
 
     /**
-     * returns the {@code Table} instance that this instance is a part of.
-     *
-     * @return SQLite data type associated with this instance.
-     */
-    public Table getTable()
-    {
-        return mProducer.getTable();
-    }
-
-    /**
      * returns the name of this instance.
      *
      * @return name of {@code Column} associated with this instance.
@@ -59,7 +49,7 @@ public class Column
      *
      * @return SQLite data type associated with this instance.
      */
-    public SQLite.Type getSQLiteType()
+    public SQLiteWords.Type getSQLiteType()
     {
         return mProducer.getSQLiteType();
     }
@@ -79,7 +69,7 @@ public class Column
      *
      * @return array on SQLite data constraints associated with this instance.
      */
-    public SQLite.Constraint[] getConstraits()
+    public SQLiteWords.Constraint[] getConstraits()
     {
         return mProducer.mConstraints;
     }

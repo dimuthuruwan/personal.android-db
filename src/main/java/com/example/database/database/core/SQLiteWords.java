@@ -1,11 +1,11 @@
-package com.example.database.database;
+package com.example.database.database.core;
 
 /**
  * defines SQLite reserved words as constant, and categorizes them.
  *
  * @author Eric Tsang
  */
-interface SQLite
+interface SQLiteWords
 {
 
     /** SQLite data types */

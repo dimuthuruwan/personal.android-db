@@ -2,10 +2,9 @@ package com.example.database.database.util;
 
 import android.content.Context;
 
-import com.example.database.database.Database;
-import com.example.database.database.QueryArgs;
-import com.example.database.database.Row;
-import com.example.database.database.Table;
+import com.example.database.database.DBAccess;
+import com.example.database.database.core.Row;
+import com.example.database.database.core.Table;
 import com.example.database.object.ThreadManager;
 
 /**todo comment
@@ -15,17 +14,17 @@ public class PipeRowLoader
 {
     private final Context mContext;
     private final Table mTable;
-    private final QueryArgs mQueryArgs;
+    private final Queryable mQueryable;
     private final Callback mCallback;
 
     private boolean mIsRunning;
     private boolean mReloadCursorOnLoad;
 
-    public PipeRowLoader(Context context, Table table, QueryArgs queryArgs, Callback callback)
+    public PipeRowLoader(Context context, Table table, Queryable queryable, Callback callback)
     {
         mContext = context;
         mTable = table;
-        mQueryArgs = queryArgs;
+        mQueryable = queryable;
         mCallback = callback;
         mIsRunning = false;
         mReloadCursorOnLoad = false;
@@ -53,19 +52,22 @@ public class PipeRowLoader
         }
     }
 
+    public interface Queryable
+    {
+        public void query(DBAccess.OnRowLoadedListener listener);
+    }
+
     private class OnLoadStartRunnable implements Runnable
     {
         @Override
         public void run()
         {
-            Database db = mTable.getWritableDatabase(mContext);
-            mTable.selectRows(db, mQueryArgs, new OnRowLoadedRunnable());
+            mQueryable.query(new OnRowLoadedRunnable());
             ThreadManager.runOnMainThread(new OnLoadFinishRunnable());
-            db.close();
         }
     }
 
-    private class OnRowLoadedRunnable implements Runnable, Table.OnRowLoadedListener, Cloneable
+    private class OnRowLoadedRunnable implements Runnable, DBAccess.OnRowLoadedListener, Cloneable
     {
         private Row mLoadedRow;
 

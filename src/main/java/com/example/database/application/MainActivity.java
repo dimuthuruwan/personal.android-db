@@ -22,11 +22,11 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import com.example.database.R;
-import com.example.database.database.Database;
-import com.example.database.database.NamesTable;
-import com.example.database.database.QueryArgsBuilder;
-import com.example.database.database.Row;
+import com.example.database.database.DBAccess;
+import com.example.database.database.core.NamesTable;
+import com.example.database.database.core.Row;
 import com.example.database.database.util.DBAdapter;
+import com.example.database.database.util.PipeRowLoader;
 import com.example.database.domain.Name;
 
 public class MainActivity extends ActionBarActivity
@@ -115,33 +115,33 @@ public class MainActivity extends ActionBarActivity
     ///////////////////////
 
     public void insertName(Name name) {
-        Database db = NamesTable.sInstance.getWritableDatabase(this);
-        NamesTable.sInstance.insertOrUpdateRows(db, name.toRow());
-        db.close();
+        DBAccess.insertName(this, name);
         mDBAdapter.notifyDataSetChanged();
     }
 
     public void updateName() {
-        Database db = NamesTable.sInstance.getWritableDatabase(this);
-        NamesTable.sInstance.insertOrUpdateRows(db, nameToEdit.toRow());
-        db.close();
+        DBAccess.updateName(this, nameToEdit);
         mDBAdapter.notifyDataSetChanged();
     }
 
     public void deleteNames(Set<Row> rows) {
-        Database db = NamesTable.sInstance.getWritableDatabase(this);
-        NamesTable.sInstance.deleteRows(db, rows.toArray(new Row[rows.size()]));
-        db.close();
+        DBAccess.deleteNames(this, rows.toArray(new Row[rows.size()]));
         mDBAdapter.notifyDataSetChanged();
     }
-
-
 
     /////////////////////
     // support methods //
     /////////////////////
     private void initializeInstanceData() {
-        mDBAdapter = new DBAdapter(this, NamesTable.sInstance, new QueryArgsBuilder().getQueryArgs())
+        PipeRowLoader.Queryable querable = new PipeRowLoader.Queryable()
+        {
+            @Override
+            public void query(DBAccess.OnRowLoadedListener listener)
+            {
+                DBAccess.getAllNames(MainActivity.this, listener);
+            }
+        };
+        mDBAdapter = new DBAdapter(this, NamesTable.sInstance, querable)
         {
             @Override
             public View getView(int position, View convertView, ViewGroup parent)
