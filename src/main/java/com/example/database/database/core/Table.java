@@ -11,42 +11,18 @@ import java.util.Set;
  */
 public abstract class Table implements SQLiteWords
 {
-    /**
-     * name of this table. used in queries involving this table.
-     */
-    private final String mName;
-
-    /**
-     * list of {@code ColumnFactory} instances used to produce the {@code
-     *   Column} instances for the {@code Row} instances of this table.
-     */
-    private final HashMap<String, ColumnFactory> mColumnFactories;
-
-    //////////////////
-    // constructors //
-    //////////////////
-
-    /**
-     * instantiates a {@code Table} instance.
-     */
-    public Table()
-    {
-        mName = initializeName();
-        mColumnFactories = initializeColumnFactories();
-    }
-
     //////////////////////
     // public interface //
     //////////////////////
 
     public final ColumnFactory getColumnFactory(String columnName)
     {
-        return mColumnFactories.get(columnName);
+        return getColumnFactories().get(columnName);
     }
 
     public final String[] getColumnNames()
     {
-        Set<String> columnNames = mColumnFactories.keySet();
+        Set<String> columnNames = getColumnFactories().keySet();
         return columnNames.toArray(new String[columnNames.size()]);
     }
 
@@ -77,14 +53,14 @@ public abstract class Table implements SQLiteWords
         // build the query
         StringBuilder q = new StringBuilder();
         q.append(Opening.CREATE_TABLE_IF_NOT_EXISTS);
-        q.append(mName);
+        q.append(getName());
         boolean firstIteration = true;
-        for(String columnName : mColumnFactories.keySet())
+        for(String columnName : getColumnFactories().keySet())
         {
             q.append((firstIteration) ? "(" : ",");
             q.append(columnName);
-            q.append(mColumnFactories.get(columnName).getSQLiteType());
-            for(Constraint constraint : mColumnFactories.get(columnName).mConstraints)
+            q.append(getColumnFactories().get(columnName).getSQLiteType());
+            for(Constraint constraint : getColumnFactories().get(columnName).mConstraints)
             {
                 q.append(constraint);
             }
@@ -108,12 +84,7 @@ public abstract class Table implements SQLiteWords
      */
     public final synchronized String getDropTableQuery()
     {
-        return Opening.DROP_TABLE_IF_EXISTS+mName;
-    }
-
-    public final Map<String, ColumnFactory> getColumnFactories()
-    {
-        return new HashMap<>(mColumnFactories);
+        return Opening.DROP_TABLE_IF_EXISTS+getName().toString();
     }
 
     ///////////////////////
@@ -126,7 +97,7 @@ public abstract class Table implements SQLiteWords
      *
      * @return name of this table.
      */
-    abstract String initializeName();
+    abstract Object getName();
 
     /**
      * returns an array of {@code ColumnFactory} instances used to produce the
@@ -137,7 +108,7 @@ public abstract class Table implements SQLiteWords
      * @return array of {@code ColumnFactory} instances used to produce the
      *   columns for this instance.
      */
-    abstract HashMap<String, ColumnFactory> initializeColumnFactories();
+    abstract HashMap<String, ColumnFactory> getColumnFactories();
 
     /**
      * returns an array of {@code Column} instances associated with this table.
@@ -146,10 +117,10 @@ public abstract class Table implements SQLiteWords
      */
     final Map<String, Column> makeColumns()
     {
-        Map<String, Column> columns = new LinkedHashMap<>(mColumnFactories.size());
-        for(String columnName : mColumnFactories.keySet())
+        Map<String, Column> columns = new LinkedHashMap<>(getColumnFactories().size());
+        for(String columnName : getColumnFactories().keySet())
         {
-            columns.put(columnName, mColumnFactories.get(columnName).makeColumn());
+            columns.put(columnName, getColumnFactories().get(columnName).makeColumn());
         }
         return columns;
     }

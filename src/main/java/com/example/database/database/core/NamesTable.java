@@ -15,20 +15,25 @@ public class NamesTable extends Table
 {
     public static final NamesTable sInstance = new NamesTable();
 
+    public static final HashMap<String, ColumnFactory> mColumnFactories = new HashMap<>(3);
+
+    static
+    {
+        mColumnFactories.put(Entry._ID, new ColumnFactory(Entry._ID, JavaType.LONG, Constraint.PRIMARY_KEY));
+        mColumnFactories.put(Entry.FIRST_NAME, new ColumnFactory(Entry.FIRST_NAME, JavaType.STRING, Constraint.NOT_NULL));
+        mColumnFactories.put(Entry.LAST_NAME, new ColumnFactory(Entry.LAST_NAME, JavaType.STRING, Constraint.NOT_NULL));
+    }
+
     @Override
-    String initializeName()
+    String getName()
     {
         return Entry.TABLE_NAME;
     }
 
     @Override
-    HashMap<String, ColumnFactory> initializeColumnFactories()
+    HashMap<String, ColumnFactory> getColumnFactories()
     {
-        HashMap<String, ColumnFactory> toReturn = new HashMap<>(3);
-        toReturn.put(Entry._ID, new ColumnFactory(Entry._ID, JavaType.LONG, Constraint.PRIMARY_KEY));
-        toReturn.put(Entry.FIRST_NAME, new ColumnFactory(Entry.FIRST_NAME, JavaType.STRING, Constraint.NOT_NULL));
-        toReturn.put(Entry.LAST_NAME, new ColumnFactory(Entry.LAST_NAME,  JavaType.STRING, Constraint.NOT_NULL));
-        return toReturn;
+        return mColumnFactories;
     }
 
     /** contract describing table used for saving name data */
