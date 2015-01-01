@@ -5,27 +5,44 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.example.database.database.DBAccess;
 import com.example.database.database.core.Row;
-import com.example.database.database.core.Table;
 
 import java.util.ArrayList;
 
-/**todo comment
- * Created by Eric Tsang on 20/12/2014.
+/**
+ * subclass of the {@code BaseAdapter} class that uses a {@code PipeRowLoader}
+ *   instance to interface with the database. this can be used by {@code
+ *   AdapterViews}.
  */
 public abstract class DBAdapter extends BaseAdapter
 {
-    /** {@code Runnable} instance used to load {@code Cursor} objects from a {@code Table}. */
+    /**
+     * list of rows used for random access.
+     */
     private ArrayList<Row> mData;
 
+    /**
+     * used to load rows from the database as needed.
+     */
     private PipeRowLoader mRowLoader;
 
-    public DBAdapter(Context context, Table table, PipeRowLoader.Queryable querable)
+    /////////////////
+    // constructor //
+    /////////////////
+
+    /**
+     * instantiates a {@code DBAdapter} object.
+     *
+     * @param  context context of the application
+     * @param  querable used to query the database. determines what is in this
+     *   adapter; what gets displayed by observing {@code AdapterViews}.
+     */
+    public DBAdapter(Context context, PipeRowLoader.Queryable querable)
     {
         super();
         mData = new ArrayList<>();
-        mRowLoader = new PipeRowLoader(context, table, querable, new MyRowLoaderObserver());
+        mRowLoader = new PipeRowLoader(context, querable,
+                new MyRowLoaderObserver());
     }
 
     //////////////////////
@@ -63,7 +80,7 @@ public abstract class DBAdapter extends BaseAdapter
     // private interface //
     ///////////////////////
 
-    private class MyRowLoaderObserver implements PipeRowLoader.Callback
+    private class MyRowLoaderObserver implements PipeRowLoader.RowLoadEventListener
     {
         private int mRowIndex;
 

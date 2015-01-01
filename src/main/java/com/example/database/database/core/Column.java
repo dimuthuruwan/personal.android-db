@@ -1,6 +1,7 @@
 package com.example.database.database.core;
 
 import java.nio.ByteBuffer;
+import com.example.database.database.core.DBWords.JavaType;
 
 /**
  * {@code Column} instance represents a column that's part of a row in a table
@@ -49,7 +50,7 @@ public class Column
      *
      * @return SQLite data type associated with this instance.
      */
-    public SQLiteWords.Type getSQLiteType()
+    public DBWords.SQLiteType getSQLiteType()
     {
         return mProducer.getSQLiteType();
     }
@@ -59,7 +60,7 @@ public class Column
      *
      * @return Java data type associated with this instance.
      */
-    public ColumnFactory.JavaType getJavaType()
+    public JavaType getJavaType()
     {
         return mProducer.getJavaType();
     }
@@ -69,7 +70,7 @@ public class Column
      *
      * @return array on SQLite data constraints associated with this instance.
      */
-    public SQLiteWords.Constraint[] getConstraits()
+    public DBWords.Constraint[] getConstraits()
     {
         return mProducer.mConstraints;
     }
@@ -90,7 +91,7 @@ public class Column
      */
     public void setValue(boolean data)
     {
-        if(getJavaType() != ColumnFactory.JavaType.BOOLEAN)
+        if(getJavaType() != JavaType.BOOLEAN)
         {
             throw new IllegalStateException("Invalid data type for column; column is for "
                     +getJavaType()+" values");
@@ -104,7 +105,7 @@ public class Column
 
     public void setValue(byte ... data)
     {
-        if(getJavaType() != ColumnFactory.JavaType.BYTES)
+        if(getJavaType() != JavaType.BYTES)
         {
             throw new IllegalStateException("Invalid data type for column; column is for "
                     +getJavaType()+" values");
@@ -115,7 +116,7 @@ public class Column
 
     public void setValue(double data)
     {
-        if(getJavaType() != ColumnFactory.JavaType.DOUBLE)
+        if(getJavaType() != JavaType.DOUBLE)
         {
             throw new IllegalStateException("Invalid data type for column; column is for "
                     +getJavaType()+" values");
@@ -128,7 +129,7 @@ public class Column
 
     public void setValue(float data)
     {
-        if(getJavaType() != ColumnFactory.JavaType.FLOAT)
+        if(getJavaType() != JavaType.FLOAT)
         {
             throw new IllegalStateException("Invalid data type for column; column is for "
                     +getJavaType()+" values");
@@ -141,7 +142,7 @@ public class Column
 
     public void setValue(int data)
     {
-        if(getJavaType() != ColumnFactory.JavaType.INT)
+        if(getJavaType() != JavaType.INT)
         {
             throw new IllegalStateException("Invalid data type for column; column is for "
                     +getJavaType()+" values");
@@ -154,7 +155,7 @@ public class Column
 
     public void setValue(long data)
     {
-        if(getJavaType() != ColumnFactory.JavaType.LONG)
+        if(getJavaType() != JavaType.LONG)
         {
             throw new IllegalStateException("Invalid data type for column; column is for "
                     +getJavaType()+" values");
@@ -167,7 +168,7 @@ public class Column
 
     public void setValue(short data)
     {
-        if(getJavaType() != ColumnFactory.JavaType.SHORT)
+        if(getJavaType() != JavaType.SHORT)
         {
             throw new IllegalStateException("Invalid data type for column; column is for "
                     +getJavaType()+" values");
@@ -180,7 +181,7 @@ public class Column
 
     public void setValue(String data)
     {
-        if(getJavaType() != ColumnFactory.JavaType.STRING)
+        if(getJavaType() != JavaType.STRING)
         {
             throw new IllegalStateException("Invalid data type for column; column is for "
                     +getJavaType()+" values");
@@ -208,10 +209,10 @@ public class Column
      */
     public boolean getBoolean()
     {
-        if(getJavaType() != ColumnFactory.JavaType.BOOLEAN)
+        if(getJavaType() != JavaType.BOOLEAN)
         {
             throw new IllegalStateException("this column holds " + getJavaType()
-                    + "values; cannot getBoolean()");
+                    + " values; cannot getBoolean()");
         }
 
         return (mData[0] == 0x01);
@@ -219,10 +220,10 @@ public class Column
 
     public byte[] getBytes()
     {
-        if(getJavaType() != ColumnFactory.JavaType.BYTES)
+        if(getJavaType() != JavaType.BYTES)
         {
             throw new IllegalStateException("this column holds " + getJavaType()
-                    + "values; cannot getBytes()");
+                    + " values; cannot getBytes()");
         }
 
         return mData;
@@ -230,10 +231,10 @@ public class Column
 
     public double getDouble()
     {
-        if(getJavaType() != ColumnFactory.JavaType.DOUBLE)
+        if(getJavaType() != JavaType.DOUBLE)
         {
             throw new IllegalStateException("this column holds " + getJavaType()
-                    + "values; cannot getDouble()");
+                    + " values; cannot getDouble()");
         }
 
         return ByteBuffer.wrap(mData).getDouble();
@@ -241,10 +242,10 @@ public class Column
 
     public float getFloat()
     {
-        if(getJavaType() != ColumnFactory.JavaType.FLOAT)
+        if(getJavaType() != JavaType.FLOAT)
         {
             throw new IllegalStateException("this column holds " + getJavaType()
-                    + "values; cannot getFloat()");
+                    + " values; cannot getFloat()");
         }
 
         return ByteBuffer.wrap(mData).getFloat();
@@ -252,10 +253,10 @@ public class Column
 
     public int getInt()
     {
-        if(getJavaType() != ColumnFactory.JavaType.INT)
+        if(getJavaType() != JavaType.INT)
         {
             throw new IllegalStateException("this column holds " + getJavaType()
-                    + "values; cannot getInt()");
+                    + " values; cannot getInt()");
         }
 
         return ByteBuffer.wrap(mData).getInt();
@@ -263,10 +264,10 @@ public class Column
 
     public long getLong()
     {
-        if(getJavaType() != ColumnFactory.JavaType.LONG)
+        if(getJavaType() != JavaType.LONG)
         {
             throw new IllegalStateException("this column holds " + getJavaType()
-                    + "values; cannot getLong()");
+                    + " values; cannot getLong()");
         }
 
         return ByteBuffer.wrap(mData).getLong();
@@ -274,10 +275,10 @@ public class Column
 
     public short getShort()
     {
-        if(getJavaType() != ColumnFactory.JavaType.SHORT)
+        if(getJavaType() != JavaType.SHORT)
         {
             throw new IllegalStateException("this column holds " + getJavaType()
-                    + "values; cannot getShort()");
+                    + " values; cannot getShort()");
         }
 
         return ByteBuffer.wrap(mData).getShort();
@@ -285,10 +286,10 @@ public class Column
 
     public String getString()
     {
-        if(getJavaType() != ColumnFactory.JavaType.STRING)
+        if(getJavaType() != JavaType.STRING)
         {
             throw new IllegalStateException("this column holds " + getJavaType()
-                    + "values; cannot getString()");
+                    + " values; cannot getString()");
         }
 
         try

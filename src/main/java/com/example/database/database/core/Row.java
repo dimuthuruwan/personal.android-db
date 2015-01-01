@@ -1,8 +1,6 @@
 package com.example.database.database.core;
-import android.content.ContentValues;
-import android.provider.BaseColumns;
 
-import com.example.database.database.DBAccess;
+import android.provider.BaseColumns;
 
 import java.util.Map;
 

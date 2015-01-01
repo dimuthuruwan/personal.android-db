@@ -1,5 +1,6 @@
 package com.example.database.database;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,34 +12,33 @@ import android.util.Log;
 import com.example.database.database.core.Column;
 import com.example.database.database.core.ColumnFactory;
 import com.example.database.database.core.NamesTable;
+import com.example.database.database.core.DBWords.JavaType;
 import com.example.database.database.core.Row;
-import com.example.database.database.core.Table;
 import com.example.database.domain.Name;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- *todo implement
- * todo comment
- *
- * @author Eric Tsang
+ * DBAccess is used to get information from the database.
  */
 public class DBAccess extends SQLiteOpenHelper
 {
     public static final String TAG = DBAccess.class.getSimpleName();
 
     /**
-     * if DB schema changes, you must implement an onUpgrade,
-     * and change the db version.
-     * DB version >= 1.
+     * if DB schema changes, you must implement an onUpgrade, and change the db
+     *   version. DB version >= 1.
      */
     public static final int DATABASE_VERSION = 1;
 
     /** name of file used to save the database data */
     public static final String DATABASE_NAME = "EverythingDatabase.db";
 
-    public static DBAccess sInstance;
+    /**
+     * singleton instance of the database.
+     */
+    private static DBAccess sInstance;
 
     //////////////////
     // constructors //
@@ -52,6 +52,11 @@ public class DBAccess extends SQLiteOpenHelper
     // public interface //
     //////////////////////
 
+    /**
+     * passed into some query methods; once a row has been parsed from the
+     *   cursor that results from the query, callbacks of the passed instance
+     *   will be invoked to pass the row information.
+     */
     public interface OnRowLoadedListener
     {
         public void onRowLoaded(Row r);
@@ -165,6 +170,23 @@ public class DBAccess extends SQLiteOpenHelper
     // private interface //
     ///////////////////////
 
+    /**
+     * parses the data out of the {@code cursor} using the information in the
+     *   {@code columnFactories}. as the row data gets parsed out of the {@code
+     *   cursor}, callbacks of the {@code listener} will be invoked. once all
+     *   the rows have been loaded, the function also returns an array of all
+     *   the rows.
+     *
+     * @param  cursor Cursor object obtained from a database query.
+     * @param  listener will have its method invoked asynchronously as rows are
+     *   parsed out of the {@code cursor}.
+     * @param  columnFactories map of column names as {@code String} objects,
+     *   and {@code ColumnFactory} objects. this map is used to resolve which
+     *   {@code ColumnFactory} should be used to produce the columns for the
+     *   columns in {@code cursor}.
+     *
+     * @return array of {@code Row} objects loaded from the {@code cursor}.
+     */
     private static Row[] cursorToRows(Cursor cursor, OnRowLoadedListener listener,
                                       Map<String, ColumnFactory> columnFactories)
     {
@@ -249,9 +271,17 @@ public class DBAccess extends SQLiteOpenHelper
                 listener.onRowLoaded(rows[i]);
             }
         }
+        cursor.close();
         return rows;
     }
 
+    /**
+     * retrieves the singleton instance of DBAccess.
+     *
+     * @param  context {@code Context} object of the application.
+     *
+     * @return the singleton instance of {@code DBAccess}.
+     */
     private static DBAccess getInstance(Context context)
     {
         if(sInstance == null)
@@ -261,7 +291,19 @@ public class DBAccess extends SQLiteOpenHelper
         return sInstance;
     }
 
-    private static boolean verifyType(ColumnFactory.JavaType javaType, int cursorFieldType)
+    /**
+     * verifies that {@code javaType} and {@code cursorFieldType} are logically
+     *   compatible. returns true if they are logically compatible; false
+     *   otherwise.
+     *
+     * @param  javaType the {@code JavaType} to verify.
+     * @param  cursorFieldType the integer representing the type of a column
+     *   obtained through {@code Cursor.getType()} to verify.
+     *
+     * @return true if the passed types are logically compatible; false
+     *   otherwise.
+     */
+    private static boolean verifyType(JavaType javaType, int cursorFieldType)
     {
         switch(javaType)
         {

@@ -5,21 +5,58 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.example.database.database.core.DBWords.Opening;
+import com.example.database.database.core.DBWords.Constraint;
+
 /**
  * describes an SQLite {@code table}. has methods that can be used to manipulate
  *   the data of this table.
  */
-public abstract class Table implements SQLiteWords
+public abstract class Table
 {
+
     //////////////////////
     // public interface //
     //////////////////////
 
+    /**
+     * returns the name of this {@code Table} instance. this is the name that
+     *   will be used by the database.
+     *
+     * @return name of this table.
+     */
+    public abstract Object getName();
+
+    /**
+     * returns a reference to a map of {@code ColumnFactory} instances used to
+     *   produce the columns for this {@code Table} object.
+     *
+     * must include a table with the name _ID in the returned map.
+     *
+     * @return array of {@code ColumnFactory} instances used to produce the
+     *   columns for this instance.
+     */
+    public abstract HashMap<String, ColumnFactory> getColumnFactories();
+
+    /**
+     * returns a reference to the {@code ColumnFactory} object with the name
+     *   {@code columnName}.
+     *
+     * @param  columnName name of the {@code ColumnFactory} object to return.
+     *
+     * @return reference to the {@code ColumnFactory} object with the name
+     *   {@code ColumnName}.
+     */
     public final ColumnFactory getColumnFactory(String columnName)
     {
         return getColumnFactories().get(columnName);
     }
 
+    /**
+     * returns an array of column names of the columns in this table.
+     *
+     * @return array of column names of the columns in this table.
+     */
     public final String[] getColumnNames()
     {
         Set<String> columnNames = getColumnFactories().keySet();
@@ -38,15 +75,7 @@ public abstract class Table implements SQLiteWords
     }
 
     /**
-     * creates this table in the {@code db}.
-     *
-     * pre-conditions:
-     *
-     * - {@code db} must be writable.
-     *
-     * post-conditions:
-     *
-     * - the table described by this instance is created in the {@code db}.
+     * returns the query that can be used to create this table in a database.
      */
     public final synchronized String getCreateTableQuery()
     {
@@ -72,15 +101,7 @@ public abstract class Table implements SQLiteWords
     }
 
     /**
-     * deletes this table from the {@code db}.
-     *
-     * pre-conditions:
-     *
-     * - {@code db} must be writable.
-     *
-     * post-conditions:
-     *
-     * - the table is deleted from {@code db}.
+     * returns the query that can be used to remove this table from a database.
      */
     public final synchronized String getDropTableQuery()
     {
@@ -92,30 +113,11 @@ public abstract class Table implements SQLiteWords
     ///////////////////////
 
     /**
-     * returns the name of this {@code Table} instance. this is the name that
-     *   will be used by the database.
+     * returns a map of {@code Column} instances associated with this table.
      *
-     * @return name of this table.
+     * @return map of {@code Column} instances associated with this table.
      */
-    public abstract Object getName();
-
-    /**
-     * returns an array of {@code ColumnFactory} instances used to produce the
-     *   columns for this instance.
-     *
-     * must include a table with the name _ID in the returned array.
-     *
-     * @return array of {@code ColumnFactory} instances used to produce the
-     *   columns for this instance.
-     */
-    public abstract HashMap<String, ColumnFactory> getColumnFactories();
-
-    /**
-     * returns an array of {@code Column} instances associated with this table.
-     *
-     * @return array of {@code Column} instances associated with this table.
-     */
-    final Map<String, Column> makeColumns()
+    private Map<String, Column> makeColumns()
     {
         Map<String, Column> columns = new LinkedHashMap<>(getColumnFactories().size());
         for(String columnName : getColumnFactories().keySet())

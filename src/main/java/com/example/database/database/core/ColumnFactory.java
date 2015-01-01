@@ -1,5 +1,7 @@
 package com.example.database.database.core;
 
+import com.example.database.database.core.DBWords.JavaType;
+
 /**
  * {@code ColumnFactory} produces columns that are associated with this factory.
  *   uses the flyweight pattern; produced {@code Column} instances are
@@ -23,29 +25,12 @@ public class ColumnFactory
     /**
      * SQLite data type that's being stored in products.
      */
-    private final SQLiteWords.Type mSQLiteType;
-
-    /** describes the data types that can be saved in this instance. */
-    public enum JavaType
-    {
-        BOOLEAN("boolean"),
-        BYTES("byte"),
-        DOUBLE("double"),
-        FLOAT("float"),
-        INT("integer"),
-        LONG("long"),
-        SHORT("short"),
-        STRING("string");
-
-        private final String mStringValue;
-        private JavaType(String stringValue) { mStringValue = stringValue; }
-        public String toString() { return mStringValue; }
-    }
+    private final DBWords.SQLiteType mSQLiteType;
 
     /**
      * SQLite data constraints placed on products.
      */
-    final SQLiteWords.Constraint[] mConstraints;
+    final DBWords.Constraint[] mConstraints;
 
     //////////////////
     // constructors //
@@ -60,49 +45,13 @@ public class ColumnFactory
      * @param constraints data constraints associated with produced {@code
      *   Column} instances.
      */
-    public ColumnFactory(String name, JavaType type, SQLiteWords.Constraint ... constraints)
+    public ColumnFactory(String name, JavaType type,
+                         DBWords.Constraint ... constraints)
     {
         mName = name.trim();
         mJavaType = type;
         mConstraints = constraints;
-        switch(mJavaType)
-        {
-
-            case BOOLEAN:
-            mSQLiteType = SQLiteWords.Type.INT;
-            break;
-
-            case BYTES:
-            mSQLiteType = SQLiteWords.Type.BLOB;
-            break;
-
-            case DOUBLE:
-            mSQLiteType = SQLiteWords.Type.REAL;
-            break;
-
-            case FLOAT:
-            mSQLiteType = SQLiteWords.Type.REAL;
-            break;
-
-            case INT:
-            mSQLiteType = SQLiteWords.Type.INT;
-            break;
-
-            case LONG:
-            mSQLiteType = SQLiteWords.Type.INT;
-            break;
-
-            case SHORT:
-            mSQLiteType = SQLiteWords.Type.INT;
-            break;
-
-            case STRING:
-            mSQLiteType = SQLiteWords.Type.TEXT;
-            break;
-
-            default:
-            throw new RuntimeException("missing case statement for mapping JavaType to SQLite.Type");
-        }
+        mSQLiteType = DBWords.getSQLiteType(mJavaType);
     }
 
     //////////////////////
@@ -124,7 +73,7 @@ public class ColumnFactory
      *
      * @return SQLite data type associated with products.
      */
-    public SQLiteWords.Type getSQLiteType()
+    public DBWords.SQLiteType getSQLiteType()
     {
         return mSQLiteType;
     }

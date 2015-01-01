@@ -2,7 +2,8 @@ package com.example.database.database.core;
 
 import android.provider.BaseColumns;
 
-import com.example.database.database.core.ColumnFactory.JavaType;
+import com.example.database.database.core.DBWords.JavaType;
+import com.example.database.database.core.DBWords.Constraint;
 
 import java.util.HashMap;
 

@@ -141,7 +141,7 @@ public class MainActivity extends ActionBarActivity
                 DBAccess.getAllNames(MainActivity.this, listener);
             }
         };
-        mDBAdapter = new DBAdapter(this, NamesTable.sInstance, querable)
+        mDBAdapter = new DBAdapter(this, querable)
         {
             @Override
             public View getView(int position, View convertView, ViewGroup parent)
